@@ -12,16 +12,20 @@ class TransaksiController extends Controller
     // Chek Stock
     public function stock($id, $defautl='json'){ // You can use $default variable with input (json, collection) if
         $barang = Barang::with('transaksi')->find($id);
-        $data=[
-            'record'        => $barang,
-            'total_pesanan'   => $barang->transaksi->whereIn('status', ['checkout','bayar'])->sum('jumlah')
-        ];
-        if($defautl == 'json'){
-            // JSON
-            return response()->json($data);
+        if($barang){
+            $data=[
+                'record'        => $barang,
+                'total_pesanan'   => $barang->transaksi->whereIn('status', ['checkout','bayar'])->sum('jumlah')
+            ];
+            if($defautl == 'json'){
+                // JSON
+                return response()->json($data);
+            }
+    
+            return $data;
+        }else {
+            return false;
         }
-
-        return $data;
     }
 
     // Chek Out Barang
@@ -29,25 +33,33 @@ class TransaksiController extends Controller
         $data_json = [];
         foreach(request()->barang_id as $key => $val){
             $cek = $this->stock($val, 'collection');
-            $barangReject = ($cek['record']->stock_reject?$cek['record']->stock_reject:0);
-            if((($cek['record']->stok_awal - $cek['total_pesanan']) - $barangReject  >=  request()->jumlah[$key])){
-                $param = [
-                    'barang_id'  => $val,
-                    'jumlah'     => request()->jumlah[$key],
-                    'status'     => 'checkout',
-                    'stock'     => ($cek['record']->stok_awal - $cek['total_pesanan']-$barangReject),
-                    'message'    => 'Barang Tersedia Siap di prosses',
-                ];
-                TransaksiOrder::checkoutSave($param);
-                
-                $data_json[] = $param;
+            if($cek){
+                $stockReject =  $cek['record']->stock_reject?$cek['record']->stock_reject:0;
+                if((($cek['record']->stok_awal - $cek['total_pesanan'])-$stockReject >=  request()->jumlah[$key])){
+                    $param = [
+                        'barang_id'  => $val,
+                        'jumlah'     => request()->jumlah[$key],
+                        'status'     => 'checkout',
+                        'stock'     => (($cek['record']->stok_awal - $cek['total_pesanan'])-$stockReject),
+                        'message'    => 'Barang Tersedia Siap di prosses',
+                    ];
+                    TransaksiOrder::checkoutSave($param);
+                    
+                    $data_json[] = $param;
+                }else{
+                    $data_json[] = [
+                        'barang_id'  => $val,
+                        'jumlah'     => request()->jumlah[$key],
+                        'status'     => 'habis',
+                        'stock'     => (($cek['record']->stok_awal - $cek['total_pesanan'])-$stockReject),
+                        'message'    => 'Barang Habis Tidak Dapat di Prosses',
+                    ];
+                }
             }else{
                 $data_json[] = [
                     'barang_id'  => $val,
-                    'jumlah'     => request()->jumlah[$key],
-                    'status'     => 'habis',
-                    'stock'     => ($cek['record']->stok_awal - $cek['total_pesanan']-$barangReject),
-                    'message'    => 'Barang Habis Tidak Dapat di Prosses',
+                    'status' => 'failed',
+                    'message' => 'Tidak ditemukan'
                 ];
             }
 
@@ -57,9 +69,7 @@ class TransaksiController extends Controller
 
     // Bayar Barang
     public function bayar(){
-        // $cek = $this->stock(1, 'collection');
-        
-        // /$cek['total_order']
+    
     }
 
 }
