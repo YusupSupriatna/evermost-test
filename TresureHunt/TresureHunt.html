@@ -99,7 +99,7 @@
             
             $('#anulir').html(anulir);
             if(arrayHasil[row][column] == '$'){
-                $('#score').html(((((mapRowColumn[0]*mapRowColumn[1])/((mapRowColumn[0]*mapRowColumn[1])-anulir)))*100));
+                $('#score').html((((((mapRowColumn[0]*mapRowColumn[1])-anulir)/(mapRowColumn[0]*mapRowColumn[1])))*100));
             }
 
             // console.log(arrayRintangan);
