@@ -44,5 +44,7 @@ class BarangController extends BaseController
     // Destroy
     public function delete(Barang $barang){
         $barang->deletes(request());
+        return response()->json(['status'=>true]);
+
     }
 }

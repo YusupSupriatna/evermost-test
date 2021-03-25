@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <script src="jquery-3.6.0.min.js"></script> 
+    <script>
+        var row =  0;
+        var column = 0;
+        var mapRowColumn = [6,8];
+
+        // Kamus Data
+        var i, j =1;
+
+        // Location Start Map
+        var rowStart= Math.floor(Math.random() * 6) + 1;
+        var ColStart= Math.floor(Math.random() * 8) + 1;
+        // Location Hunt
+        var rowEnd= Math.floor(Math.random() * 6) + 1;
+        var ColEnd= Math.floor(Math.random() * 8) + 1;
+        if(rowStart == rowEnd &&  ColStart == ColEnd){
+            document.location.reload();   
+        }
+        // Rintangan
+        var arrayRintangan = [];
+        for(i = 1; i<=mapRowColumn[0]; i++){
+            arrayRintangan[i] = [];
+            for (j = 1; j <= mapRowColumn[1]; j++) {
+                arrayRintangan[i][j] = "#";
+            }
+        }
+        arrayRintangan[rowStart][ColStart] = "X";
+
+
+        // Hasil Pencarian
+        var arrayHasil=[];
+        for(i = 1; i<=mapRowColumn[0]; i++){
+            arrayHasil[i] = [];
+            for (j = 1; j <= mapRowColumn[1]; j++) {
+                arrayHasil[i][j] = ".";
+            }
+        }
+        console.log();
+        // Random Start
+        arrayHasil[rowStart][ColStart] = "X";
+        // Random Harta
+        arrayHasil[Math.floor(Math.random() * 6) + 1][Math.floor(Math.random() * 8) + 1] = "$";
+
+        function getTable(){
+            
+            $('#tables td').detach();
+            $('#tables tr').detach();
+            var table = $('#tables');
+            table.append('<tr>');
+            for (j = 0; j <= mapRowColumn[1]; j++) {
+                        table.append('<td>' + j + '</td>');
+                    }
+            table.append('</tr>');
+            for(i = 1; i<=mapRowColumn[0]; i++){
+                table.append('<tr>');
+                    table.append('<td>'+ i +'</td>');
+                    for (j = 1; j <= mapRowColumn[1]; j++) {
+                        table.append('<td>' + arrayRintangan[i][j] + '</td>');
+                    }
+                table.append('</tr>');
+            }
+
+        }
+        
+        var n=[];
+        var anulir=0;
+
+        function getArray(){
+            row     = $("#row").val();
+            column  = $("#column").val();
+            result  = arrayHasil[row][column];
+            
+            if(arrayHasil[row][column] == '.' && arrayRintangan[row][column] !== '.'){
+                anulir +=1;
+            }
+            
+            $('#anulir').html(anulir);
+            if(arrayHasil[row][column] == '$'){
+                $('#score').html(((((mapRowColumn[0]*mapRowColumn[1])/((mapRowColumn[0]*mapRowColumn[1])-anulir)))*100));
+            }
+
+            // console.log(arrayRintangan);
+            arrayRintangan[row][column] = result;
+
+            getTable();
+        }
+    </script>
+    <style>
+        td{
+            width: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+    <body onLoad="getTable()" style="text-align: center; ">
+        <input type="text" id="row" value="" placeholder="0" style="width:50px;">
+        <input type="text" id="column" value="" placeholder="0" style="width:50px;">
+        <button type="button" onclick="getArray()">Submit</button>
+
+        <table id="tables" border='1' align="center" style="margin-top: 15px;">
+        </table>
+        <table align="center" style="width:10%">
+            <tr>
+                <td>Clear path</td>
+                <td>
+                    <span id="anulir"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>Score</td>
+                <td>
+                    <span id="score"></span>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

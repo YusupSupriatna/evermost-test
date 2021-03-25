@@ -40,7 +40,7 @@ class TransaksiController extends Controller
                         'barang_id'  => $val,
                         'jumlah'     => request()->jumlah[$key],
                         'status'     => 'checkout',
-                        'stock'     => (($cek['record']->stok_awal - $cek['total_pesanan'])-$stockReject),
+                        'stock'      => (($cek['record']->stok_awal - $cek['total_pesanan'])-$stockReject),
                         'message'    => 'Barang Tersedia Siap di prosses',
                     ];
                     TransaksiOrder::checkoutSave($param);
