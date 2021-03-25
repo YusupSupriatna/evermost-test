@@ -68,7 +68,7 @@ https://documenter.getpostman.com/view/2717840/TzCFiWpM
 
 ## Treasure Hunt
 You must check my Program
-https://tresurehunt.000webhostapp.com/
+https://tresurehunt.000webhostapp.com/index.html
 
 # Or Download
 
