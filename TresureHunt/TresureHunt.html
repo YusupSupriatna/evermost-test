@@ -75,6 +75,22 @@
         function getArray(){
             row     = $("#row").val();
             column  = $("#column").val();
+            if(typeof row == 'undefined' || typeof column == 'undefined'){
+                alert("Isi filed");
+                return false;
+            }else{
+                if(row <1 || column <1){
+                    alert("Masukan data yang benar");
+                    return false;
+                }
+    
+                if(row>6 || column>8){
+                    alert("Masukan data yang benar");
+                    return false;
+                }
+            }
+
+            
             result  = arrayHasil[row][column];
             
             if(arrayHasil[row][column] == '.' && arrayRintangan[row][column] !== '.'){
@@ -100,8 +116,8 @@
     </style>
 </head>
     <body onLoad="getTable()" style="text-align: center; ">
-        <input type="text" id="row" value="" placeholder="0" style="width:50px;">
-        <input type="text" id="column" value="" placeholder="0" style="width:50px;">
+        <input type="number" id="row" value="" placeholder="Row" min='1' max='6' style="width:50px;">
+        <input type="number" id="column" value="" placeholder="Column" min='1' max='8' style="width:50px;">
         <button type="button" onclick="getArray()">Submit</button>
 
         <table id="tables" border='1' align="center" style="margin-top: 15px;">
