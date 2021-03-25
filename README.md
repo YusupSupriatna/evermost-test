@@ -62,7 +62,7 @@ git clone git@github.com:YusupSupriatna/evermost-test.git
 HTTPS
 git clone https://github.com/YusupSupriatna/evermost-test.git
 
-## Documentation My API
+# Documentation My API
 
 https://documenter.getpostman.com/view/2717840/TzCFiWpM
 
@@ -70,7 +70,9 @@ https://documenter.getpostman.com/view/2717840/TzCFiWpM
 You must check my Program
 https://tresurehunt.000webhostapp.com/
 
+# Or Download
 
+https://github.com/YusupSupriatna/evermost-test/tree/main/TresureHunt
 
 ## Collection My API
 https://www.getpostman.com/collections/082733dee62c1dbf6a14
